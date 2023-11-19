@@ -934,52 +934,113 @@ myapp.post('/register', async (req, res) => {
 
 //MongoDB Login
 // LOGIN
+// myapp.post('/login', async (req, res) => {
+//   const { email, password } = req.body;
+ 
+//   try {
+//     await client.connect();
+ 
+//     // Replace this with your MongoDB collections
+//     const studentCollection = client.db("swc4u").collection('Student Accounts');
+//     const counselorCollection = client.db("swc4u").collection('Counselor Accounts');
+ 
+//     // Try to find the user in the student collection
+//     const studentData = await studentCollection.findOne({ email: email.toUpperCase() });
+ 
+//     // If not found, try to find in the counselor collection
+//     const counselorData = await counselorCollection.findOne({ email: email.toUpperCase() });
+ 
+//     // Choose the appropriate data based on where it was found
+//     const userData = studentData || counselorData;
+ 
+//     console.log('Fetched user data:', userData); // Add this line for debugging
+ 
+//     if (!userData) {
+//       console.error('User data not found');
+//       res.status(404).json({ error: 'User not found' });
+//       return;
+//     }
+ 
+//     // Verify password
+//     const passwordMatch = await bcrypt.compare(password, userData.password);
+ 
+//     if (!passwordMatch) {
+//       console.error('Invalid password');
+//       res.status(401).json({ error: 'Invalid password' });
+//       return;
+//     }
+ 
+//     // Check if the user data contains the expected accountType
+//     const { accountType } = userData;
+ 
+//     if (accountType === 'STUDENT') {
+//       req.session.studentData = userData;
+//       res.status(200).json({ success: 'Login successful', accountType: 'Student' });
+//       res.redirect('/StudentHomepage');
+//     } else if (accountType === 'COUNSELOR') {
+//       req.session.counselorData = userData;
+//       res.status(200).json({ success: 'Login successful', accountType: 'Counselor' });
+//       res.redirect('/CounselorHomepage');
+//     } else {
+//       console.error('Invalid account type:', accountType);
+//       res.status(401).json({ error: 'Invalid account type' });
+//     }
+//   } catch (e) {
+//     console.error('Unexpected error:', e);
+//     res.status(500).json({ error: 'Login failed' });
+//   } finally {
+//     await client.close(); // Close the MongoDB connection
+//   }
+// });
+
 myapp.post('/login', async (req, res) => {
   const { email, password } = req.body;
- 
+
   try {
     await client.connect();
- 
+
     // Replace this with your MongoDB collections
     const studentCollection = client.db("swc4u").collection('Student Accounts');
     const counselorCollection = client.db("swc4u").collection('Counselor Accounts');
- 
+
     // Try to find the user in the student collection
     const studentData = await studentCollection.findOne({ email: email.toUpperCase() });
- 
+
     // If not found, try to find in the counselor collection
     const counselorData = await counselorCollection.findOne({ email: email.toUpperCase() });
- 
+
     // Choose the appropriate data based on where it was found
     const userData = studentData || counselorData;
- 
+
     console.log('Fetched user data:', userData); // Add this line for debugging
- 
+
     if (!userData) {
       console.error('User data not found');
       res.status(404).json({ error: 'User not found' });
       return;
     }
- 
+
     // Verify password
     const passwordMatch = await bcrypt.compare(password, userData.password);
- 
+
     if (!passwordMatch) {
       console.error('Invalid password');
       res.status(401).json({ error: 'Invalid password' });
       return;
     }
- 
+
     // Check if the user data contains the expected accountType
     const { accountType } = userData;
- 
+
     if (accountType === 'STUDENT') {
       req.session.studentData = userData;
       res.status(200).json({ success: 'Login successful', accountType: 'Student' });
+      // Redirect after sending JSON response
       res.redirect('/StudentHomepage');
     } else if (accountType === 'COUNSELOR') {
       req.session.counselorData = userData;
       res.status(200).json({ success: 'Login successful', accountType: 'Counselor' });
+      // Redirect after sending JSON response
       res.redirect('/CounselorHomepage');
     } else {
       console.error('Invalid account type:', accountType);
@@ -992,8 +1053,6 @@ myapp.post('/login', async (req, res) => {
     await client.close(); // Close the MongoDB connection
   }
 });
-
-
 //MongoDB
 //Create APPOINTMENT
 myapp.post('/create-appointment', async (req, res) => {

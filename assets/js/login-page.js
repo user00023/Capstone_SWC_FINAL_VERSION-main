@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
  
         if (!response.ok) {
-          console.error('Error during login:', response.statusText);
+          // console.error('Error during login:', response.statusText);
           hideLoadingScreen();
           return;
         }

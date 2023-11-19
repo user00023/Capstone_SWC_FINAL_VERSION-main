@@ -976,9 +976,11 @@ myapp.post('/login', async (req, res) => {
     if (accountType === 'STUDENT') {
       req.session.studentData = userData;
       res.status(200).json({ success: 'Login successful', accountType: 'Student' });
+      res.redirect('/StudentHomepage');
     } else if (accountType === 'COUNSELOR') {
       req.session.counselorData = userData;
       res.status(200).json({ success: 'Login successful', accountType: 'Counselor' });
+      res.redirect('/CounselorHomepage');
     } else {
       console.error('Invalid account type:', accountType);
       res.status(401).json({ error: 'Invalid account type' });
